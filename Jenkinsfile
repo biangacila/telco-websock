@@ -1,8 +1,10 @@
 pipeline{
-    agent any
+    //agent any
+    agent { docker { image 'ubuntu:22.04'}}
     stages{
         stage("Build"){
             steps{
+                sh "cat /etc/os-release"
                 echo "Build"
             }
         }
