@@ -6,6 +6,11 @@ pipeline {
         }
     }
     stages {
+        stage('Verify Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
         stage("Build") {
             steps {
                 sh 'cat /etc/os-release'
