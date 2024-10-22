@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'ubuntu:22.04' // Specify your Docker image here
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Pass any arguments you need
+            image 'docker:20.10-dind'
+            args '--privileged' // Needed for Docker in Docker
         }
     }
     stages {
