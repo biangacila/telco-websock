@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package dashboard;
+
+option go_package = "../protos;protos";
+
+// Define the gRPC service
+service DashboardService {
+  // RPC to update dashboard information
+  rpc UpdateDashboard (DashboardRequest) returns (DashboardResponse);
+}
+
+// Request message
+message DashboardRequest {
+  string userCode = 1;
+  string data = 2;
+}
+
+// Response message
+message DashboardResponse {
+  string message = 1;
+}

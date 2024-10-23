@@ -8,6 +8,7 @@ import (
 	"github.com/biangacila/telco-websock/domain/repositories"
 	"github.com/biangacila/telco-websock/domain/valueobjects"
 	"github.com/biangacila/telco-websock/infrastructure/websockets"
+	"github.com/biangacila/telco-websock/interfaces/grpc"
 	"github.com/biangacila/telco-websock/interfaces/wss"
 	"github.com/biangacila/telco-websock/utils"
 	"log"
@@ -95,8 +96,13 @@ func main() {
 	})
 
 	// Start the HTTP server
-	log.Println("Starting telco websocket at port", fmt.Sprintf(":%d", cfg.Port), " ...")
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), nil); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
-	}
+	go func() {
+		log.Println("Starting telco websocket at port", fmt.Sprintf(":%d", cfg.Port), " ...")
+		if err := http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), nil); err != nil {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	// Start the gRPC server
+	grpc.StartGRPCServer(*dashboardService)
 }
