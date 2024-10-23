@@ -1,23 +1,33 @@
-# Use an official Golang image as the base image
-FROM golang:1.23.2-alpine
+FROM ubuntu:22.04
 
-# Set the Current Working Directory inside the container
+RUN apt-get update
+USER root
+
+# Update the package lists and install the 'tzdata' package
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y tzdata
+
+# Set the timezone to Africa/Johannesburg
+ENV TZ=Africa/Johannesburg
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#
+
+RUN apt-get clean
+RUN apt-get autoclean
+RUN apt-get update -y
+RUN apt-get install -y alien
+RUN apt-get install -y lftp
+
+## Update and install necessary packages
+RUN apt-get update && apt-get install -y \
+    # Install your dependencies here if needed \
+    && rm -rf /var/lib/apt/lists/*
+
+
 WORKDIR /app
+COPY programfile .
 
-# Copy go.mod and go.sum files to the workspace
-COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files haven't changed
-RUN go mod download
-
-# Copy the source code into the container
-COPY . .
-
-# Build the Go app with optimizations for smaller binaries
-RUN go build -o /programfile main.go
-
-# Expose port 8080 to the outside world (this is where your service will run)
 EXPOSE 8080
 
-# Run the executable by default when the container starts
-CMD ["/programfile"]
+CMD ["./programfile"]
