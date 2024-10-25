@@ -26,14 +26,18 @@ pipeline {
                 sh 'go mod tidy' // Ensure dependencies are installed
                 sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o programfile .'
                 script {
-                    docker.build("010309/telco-websocket:${env.BUILD_TAG}")
+                    dockerImage = docker.build("010309/telco-websocket:${env.BUILD_TAG}")
                 }
             }
         }
         stage("Push Docker Image") {
             steps {
                 script {
-                    docker.image("010309/telco-websocket:${env.BUILD_TAG}").push()
+                   // docker.image("010309/telco-websocket:${env.BUILD_TAG}").push()
+                   docker.withRegistry('','dockerhub'){
+                        dockerImage.push();
+                        dockerImage.push('latest');
+                   }
                 }
             }
         }
