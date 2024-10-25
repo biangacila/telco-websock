@@ -8,7 +8,8 @@ pipeline {
     agent any
     environment {
         dockerHome = tool 'myDocker'
-        marvenHome = tool 'myMarven'
+        mavenHome = tool 'myMaven'
+        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
     }
     stages {
         stage('Verify Docker') {
