@@ -3,7 +3,7 @@ pipeline {
     environment {
         dockerHome = tool 'myDocker'
         mavenHome = tool 'myMaven'
-        goHome = tool 'myGo' // Changed to 'myGo' as per your Jenkins setup
+        goHome = tool 'Go 1.23' // Changed to 'myGo' as per your Jenkins setup
         PATH = "$dockerHome/bin:$mavenHome/bin:$goHome/bin:$PATH"
     }
     stages {
