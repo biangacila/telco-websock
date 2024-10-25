@@ -27,6 +27,7 @@ pipeline {
         stage("Build Docker Image") {
             steps {
                 //docker build -t 010309/telco-websocket:$env.BUILD_TAG
+                sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o programfile .'
                 script{
                     docker.build("010309/telco-websocket:${env.BUILD_TAG}")
                 }
