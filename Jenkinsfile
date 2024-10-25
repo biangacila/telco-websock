@@ -1,9 +1,14 @@
 pipeline {
-    agent {
+    /* agent {
         docker {
             image 'docker:20.10-dind'
             args '--privileged' // Needed for Docker in Docker
         }
+    } */
+    agent any
+    environment {
+        dockerHome = tool 'myDocker'
+        marvenHome = tool 'myMarven'
     }
     stages {
         stage('Verify Docker') {
@@ -13,6 +18,11 @@ pipeline {
         }
         stage("Build") {
             steps {
+                sh 'mvn --version'
+                sh 'docker version'
+                echo 'PATH  - $PATH'
+                echo 'BUILD_NUMBER  - $env.BUILD_ID'
+                echo 'JOB_NAME - $env.JOB_NAME'
                 sh 'cat /etc/os-release'
                 echo "Build"
             }
