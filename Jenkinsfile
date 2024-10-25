@@ -18,24 +18,23 @@ pipeline {
                 sh 'docker version'
                 echo 'PATH  - $PATH'
                 echo 'BUILD_NUMBER  - $env.BUILD_ID'
+                echo 'BUILD_TAG - $env.BUILD_TAG'
                 echo 'JOB_NAME - $env.JOB_NAME'
                 sh 'cat /etc/os-release'
                 echo "Build"
             }
         }
-        stage("Compile") {
+        stage("Build Docker Image") {
             steps {
-                sh "mvn clean compile"
+                //docker build -t 010309/telco-websocket:$env.BUILD_TAG
+                script{
+                    docker.build("010309/telco-websocket:${env.BUILD_TAG}")
+                }
             }
         }
-        stage("Test") {
+        stage("Push Docker Image") {
             steps {
                 sh "mvn test"
-            }
-        }
-        stage("Integration Test") {
-            steps {
-                sh "mvn failsafe:integration-test failsafe:verify"
             }
         }
 
