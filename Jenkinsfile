@@ -4,7 +4,7 @@ pipeline {
         dockerHome = tool 'myDocker'
         mavenHome = tool 'myMaven'
         goHome = tool 'myGo' // Changed to 'myGo' as per your Jenkins setup
-        PATH = "$dockerHome/bin:$mavenHome/bin:$goHome/bin:$PATH"
+        PATH = "${goHome}/bin:${dockerHome}/bin:${mavenHome}/bin:$PATH"
     }
     stages {
         stage("Checkout") {
@@ -12,6 +12,7 @@ pipeline {
                 sh 'mvn --version'
                 sh 'docker version'
                 sh 'go version' // Check Go version
+                echo "PATH: $PATH"  // Log the PATH
                 echo "PATH  - $PATH"
                 echo "BUILD_NUMBER  - $env.BUILD_ID"
                 echo "BUILD_TAG - $env.BUILD_TAG"
@@ -49,3 +50,5 @@ pipeline {
         }
     }
 }
+
+
